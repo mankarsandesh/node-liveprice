@@ -40,6 +40,7 @@ const server = app.listen(PORT, () => {
     })
 
     setInterval(function(str1, str2) {
+        socket.emit('liveprice1', liveprice1);
         mio.getIO().emit('liveprice1', liveBetPrice1()) 
         mio.getIO().emit('liveprice5', liveprice5) 
     }, 1000);
