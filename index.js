@@ -34,24 +34,8 @@ let liveprice = {
 }
 
 let url = [{
-        url: 'http://hq.sinajs.cn/rn=1553570744061list=DINIW',
-        name: 'usindex'
-    },
-    {
-        url: 'https://hq.sinajs.cn/?rn=1552280540946&list=sh000001',
-        name: 'SH000001'
-    },
-    {
-        url: 'https://hq.sinajs.cn/etag.php?_=1553569520963&list=sz399001',
-        name: 'SZ399001'
-    },
-    {
-        url: 'https://hq.sinajs.cn/etag.php?_=1553569520963&list=sz399415',
-        name: 'SZ399415'
-    },
-    {
-        url: 'https://hq.sinajs.cn/etag.php?_=1553569520963&list=sh000300',
-        name: 'SH00300'
+        url: 'http://127.0.0.1:8003/liveBetCount',
+        name: 'liveData'
     }
 ]
 
@@ -65,20 +49,7 @@ app.get('/liveprice', (req, res) => {
 const server = app.listen(PORT, () => {
     let timer = 59
     livePricebtc()
-    for (let i = 0; i < url.length; i++) {
-        livePrice(url[i].url, url[i].name)
-    }
-
-    console.log(`Node app listening on port ${PORT}!`)
-    const io = require('./socket').init(server)
-    io.on('connection', socket => {
-        console.log('client connected')
-    })
-    setInterval(function(str1, str2) {
-        mio.getIO().emit('time', dt.myDateTime())
-        mio.getIO().emit('liveprice', liveprice)
-        console.log(liveprice)
-    }, 1000);
+    
 })
 
 
@@ -90,19 +61,9 @@ function livePrice(url, name) {
                 json: true
             })
             .then(function(htmlString) {
-                // Process html...
-                // console.log(htmlString)
-                // var res = htmlString.toString().split(",");
-                const rs = htmlString.toString().split(",");
-
-                currentPrice = rs[2]
-                let data = {
-                    currentPrice: currentPrice,
-                    previousPrice: previousPrice
-                }
-                liveprice[name] = data
-                previousPrice = currentPrice
-                console.log(liveprice[name])
+              
+                console.log(htmlString);
+               
             })
             .catch(function(err) {
                 // Crawling failed...
@@ -115,28 +76,16 @@ function livePricebtc() {
     let currentPrice = 0
     let previousPrice = 0
     setInterval(() => {
-        rp('https://api.huobi.pro/market/trade?symbol=btcusdt', {
+        rp('http://127.0.0.1:8003/liveBetCount', {
                 json: true
             })
             .then(function(res) {
                 // Process html...
-                // console.log(htmlString)
-                // var res = htmlString.toString().split(",");
-                // const rs = htmlString.toString().split(",");
-
-                currentPrice = res.tick.data[0].price
-                let data = {
-                    currentPrice: currentPrice,
-                    previousPrice: previousPrice
-                }
-                liveprice.btc1 = data
-                liveprice.btc5 = data
-                previousPrice = currentPrice
-                console.log(liveprice.btc1)
+                console.log(res);
             })
             .catch(function(err) {
                 // Crawling failed...
                 console.log(err)
             });
-    }, 5000)
+    }, 1000)
 }
