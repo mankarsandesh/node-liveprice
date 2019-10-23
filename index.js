@@ -18,8 +18,8 @@ let liveprice5 = {
     }
 }
 
-let url1 = "http://127.0.0.1:8003/liveBetCount?loop=1";
-let url5 = "http://127.0.0.1:8003/liveBetCount?loop=5";
+let url1 = "http://127.0.0.1:8004/liveBetCount?loop=1";
+let url5 = "http://127.0.0.1:8004/liveBetCount?loop=5";
 app.get('/', (req, res) => {
     res.send(liveprice1)
 })
@@ -40,12 +40,12 @@ const server = app.listen(PORT, () => {
     })
 
     setInterval(function(str1, str2) {
-        mio.getIO().emit('liveprice1', liveprice1) 
-        mio.getIO().emit('liveprice5', liveprice5) 
+        mio.getIO().emit('liveprice1', liveBetPrice1()) 
+        // mio.getIO().emit('liveprice5', liveprice5) 
     }, 1000);
 })
 function liveBetPrice1() {
-    setInterval(() => {
+    // setInterval(() => {
         rp(url1, {
                 json: true
             })
@@ -54,12 +54,13 @@ function liveBetPrice1() {
                 // previousPrice = currentPrice
                 console.log("Loop 1");
                 console.log(liveprice1.data)
+                return liveprice1.data
             })
             .catch(function(err) {
                 // Crawling failed...                
                 console.log(err)
             });
-    }, 1000)
+    // }, 1000)
 }
 
 function liveBetPrice5() {
