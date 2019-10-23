@@ -30,8 +30,8 @@ app.get('/liveprice5', (req, res) => {
     res.status(200).json(liveprice5)
 })
 const server = app.listen(PORT, () => {
-    liveBetPrice1()
-    liveBetPrice5()
+    console.log(liveBetPrice1())
+    // liveBetPrice5()
     console.log(`Node app listening on port ${PORT}!`)
     const io = require('./socket').init(server)
 
@@ -41,11 +41,11 @@ const server = app.listen(PORT, () => {
 
     setInterval(function(str1, str2) {
         mio.getIO().emit('liveprice1', liveBetPrice1()) 
-        // mio.getIO().emit('liveprice5', liveprice5) 
+        mio.getIO().emit('liveprice5', liveprice5) 
     }, 1000);
 })
 function liveBetPrice1() {
-    // setInterval(() => {
+    setInterval(() => {
         rp(url1, {
                 json: true
             })
@@ -54,13 +54,12 @@ function liveBetPrice1() {
                 // previousPrice = currentPrice
                 console.log("Loop 1");
                 console.log(liveprice1.data)
-                return liveprice1.data
             })
             .catch(function(err) {
                 // Crawling failed...                
                 console.log(err)
             });
-    // }, 1000)
+    }, 1000)
 }
 
 function liveBetPrice5() {
@@ -72,12 +71,13 @@ function liveBetPrice5() {
                 liveprice5.data = res.data              
                 // previousPrice = currentPrice
                 console.log("Loop 5");
-                console.log(liveprice5.data)
+                // console.log(liveprice5.data)
+                return liveprice5.data
             })
             .catch(function(err) {
                 // Crawling failed...
                 console.log(err)
             });
-    }, 1000)
+    }, 10000)
 }
 
