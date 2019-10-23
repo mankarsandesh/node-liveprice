@@ -9,79 +9,69 @@ const mio = require('./socket')
 // my modules
 var dt = require('./modules/getDateTime');
 
-let liveprice = {
-    btc1: {
-
-    },
-    usindex: {
-
-    },
-    btc5: {
-
-    },
-    SH000001: {
-
-    },
-    SZ399001: {
-
-    },
-    SZ399415: {
-
-    },
-    SH00300: {
-
+let liveprice1 = {
+    data: {
+    }
+}
+let liveprice5 = {
+    data: {
     }
 }
 
-let url = [{
-        url: 'http://127.0.0.1:8003/liveBetCount',
-        name: 'liveData'
-    }
-]
-
-
+let url1 = "http://127.0.0.1:8003/liveBetCount?loop=1";
+let url5 = "http://127.0.0.1:8003/liveBetCount?loop=5";
 app.get('/', (req, res) => {
     res.send(dt.myDateTime())
 })
-app.get('/liveprice', (req, res) => {
-    res.status(200).json(liveprice)
+app.get('/liveprice1', (req, res) => {
+    res.status(200).json(liveprice1)   
+})
+app.get('/liveprice5', (req, res) => {
+    res.status(200).json(liveprice5)
 })
 const server = app.listen(PORT, () => {
-    let timer = 59
-    livePricebtc()
-    
+    liveBetPrice1()
+    liveBetPrice5()
+    console.log(`Node app listening on port ${PORT}!`)
+    const io = require('./socket').init(server)
+
+    io.on('connection', socket => {
+        console.log('client connected')
+    })
+
+    setInterval(function(str1, str2) {
+        mio.getIO().emit('liveprice1', liveprice1) 
+        mio.getIO().emit('liveprice5', liveprice5) 
+    }, 1000);
 })
-
-
-function livePrice(url, name) {
-    let currentPrice = 0
-    let previousPrice = 0
+function liveBetPrice1() {
     setInterval(() => {
-        rp(url, {
-                json: true
-            })
-            .then(function(htmlString) {
-              
-                console.log(htmlString);
-               
-            })
-            .catch(function(err) {
-                // Crawling failed...
-                console.log(err)
-            });
-    }, 5000)
-}
-
-function livePricebtc() {
-    let currentPrice = 0
-    let previousPrice = 0
-    setInterval(() => {
-        rp('http://127.0.0.1:8003/liveBetCount', {
+        rp(url1, {
                 json: true
             })
             .then(function(res) {
-                // Process html...
-                console.log(res);
+                liveprice1.data = res.data              
+                // previousPrice = currentPrice
+                console.log("Loop 1");
+                console.log(liveprice1.data)
+            })
+            .catch(function(err) {
+                // Crawling failed...                
+                console.log(err)
+            });
+    }, 1000)
+}
+
+function liveBetPrice5() {
+    setInterval(() => {
+        rp(url5, {
+                json: true
+            })
+            .then(function(res) {
+                liveprice5.data = res.data              
+                // previousPrice = currentPrice
+                console.log("Loop 5");
+                console.log(liveprice5.data)
             })
             .catch(function(err) {
                 // Crawling failed...
@@ -89,3 +79,4 @@ function livePricebtc() {
             });
     }, 1000)
 }
+
