@@ -18,8 +18,8 @@ let liveprice5 = {
     }
 }
 
-let url1 = "http://127.0.0.1:8004/liveBetCount?loop=1";
-let url5 = "http://127.0.0.1:8004/liveBetCount?loop=5";
+let url1 = "http://127.0.0.1:8003/liveBetCount?loop=1";
+let url5 = "http://127.0.0.1:8003/liveBetCount?loop=5";
 app.get('/', (req, res) => {
     res.send(liveprice1)
 })
@@ -30,8 +30,8 @@ app.get('/liveprice5', (req, res) => {
     res.status(200).json(liveprice5)
 })
 const server = app.listen(PORT, () => {
-    console.log(liveBetPrice1())
-    // liveBetPrice5()
+        liveBetPrice1();
+        liveBetPrice5();
     console.log(`Node app listening on port ${PORT}!`)
     const io = require('./socket').init(server)
 
@@ -40,8 +40,8 @@ const server = app.listen(PORT, () => {
     })
 
     setInterval(function(str1, str2) {
-        socket.emit('liveprice1', liveprice1);
-        mio.getIO().emit('liveprice1', liveBetPrice1()) 
+        
+        mio.getIO().emit('liveprice1', liveprice1) 
         mio.getIO().emit('liveprice5', liveprice5) 
     }, 1000);
 })
@@ -54,13 +54,15 @@ function liveBetPrice1() {
                 liveprice1.data = res.data              
                 // previousPrice = currentPrice
                 console.log("Loop 1");
-                console.log(liveprice1.data)
+                console.log(res);
+                // console.log(liveprice1.data)
+                liveBetPrice1.data = res.data;
             })
             .catch(function(err) {
                 // Crawling failed...                
                 console.log(err)
             });
-    }, 1000)
+    }, 5000)
 }
 
 function liveBetPrice5() {
@@ -70,15 +72,15 @@ function liveBetPrice5() {
             })
             .then(function(res) {
                 liveprice5.data = res.data              
-                // previousPrice = currentPrice
-                console.log("Loop 5");
-                // console.log(liveprice5.data)
-                return liveprice5.data
+                
+                liveBetPrice5.data = res.data;
+                console.log(l);
+               
             })
             .catch(function(err) {
                 // Crawling failed...
                 console.log(err)
             });
-    }, 10000)
+    }, 5000)
 }
 
