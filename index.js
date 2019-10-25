@@ -18,10 +18,10 @@ let liveprice5 = {
     }
 }
 
-let url1 = "http://127.0.0.1:8003/liveBetCount?loop=1";
-let url5 = "http://127.0.0.1:8003/liveBetCount?loop=5";
+let url1 = "http://159.138.54.214/api/liveBetCount?loop=1";
+let url5 = "http://159.138.54.214/api/liveBetCount?loop=5";
 app.get('/', (req, res) => {
-    res.send("LIve Price Working")
+    res.send("LIve Price Working Now")
 })
 app.get('/liveprice1', (req, res) => {
     res.status(200).json(liveprice1)   
@@ -51,12 +51,9 @@ function liveBetPrice1() {
                 json: true
             })
             .then(function(res) {
-                liveprice1.data = res.data              
-                // previousPrice = currentPrice
+                liveprice1.data = res;
                 console.log("Loop 1");
-                console.log(res);
-                // console.log(liveprice1.data)
-                liveBetPrice1.data = res.data;
+                console.log(res);              
             })
             .catch(function(err) {
                 // Crawling failed...                
@@ -71,11 +68,8 @@ function liveBetPrice5() {
                 json: true
             })
             .then(function(res) {
-                liveprice5.data = res.data              
-                
-                liveBetPrice5.data = res.data;
+                liveprice5.data = res; 
                 console.log(l);
-               
             })
             .catch(function(err) {
                 // Crawling failed...
