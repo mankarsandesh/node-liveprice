@@ -21,7 +21,7 @@ let liveprice5 = {
 let url1 = "http://127.0.0.1:8003/liveBetCount?loop=1";
 let url5 = "http://127.0.0.1:8003/liveBetCount?loop=5";
 app.get('/', (req, res) => {
-    res.send(liveprice1)
+    res.send("Herllo")
 })
 app.get('/liveprice1', (req, res) => {
     res.status(200).json(liveprice1)   
