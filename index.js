@@ -42,7 +42,7 @@ const server = app.listen(PORT, () => {
     setInterval(function(str1, str2) {
         
         mio.getIO().emit('liveprice1', liveprice1) 
-        mio.getIO().emit('liveprice5', liveprice5) 
+        mio.getIO().emit('-', liveprice5) 
     }, 1000);
 })
 function liveBetPrice1() {
