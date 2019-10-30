@@ -18,10 +18,10 @@ let liveprice5 = {
     }
 }
 
-let url1 = "http://159.138.54.214/api/liveBetCount?loop=1";
-let url5 = "http://159.138.54.214/api/liveBetCount?loop=5";
+let url1 = "http://159.138.54.214/liveBetCount?loop=1";
+let url5 = "http://159.138.54.214/liveBetCount?loop=5";
 app.get('/', (req, res) => {
-    res.send("LIve Price Working Now")
+    res.send("LIve Price Working Now 11")
 })
 app.get('/liveprice1', (req, res) => {
     res.status(200).json(liveprice1)   
